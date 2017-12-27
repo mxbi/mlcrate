@@ -2,7 +2,7 @@ import pickle
 import gzip
 import os
 
-from . import time
+from . import time, kaggle, xgb
 
 __version__ = '0.0.0a1'
 
@@ -33,20 +33,6 @@ def load(filename):
         fp = open(filename, 'rb')
 
     return pickle.load(fp)
-
-def save_kaggle_sub(df, filename='sub.csv.gz'):
-    """Saves the past dataframe with index=False, and enables GZIP compression if a '.gz' extension is passed.
-
-    Keyword arguments:
-    df -- The pandas DataFrame of the submission
-    filename -- The filename to save the submission to. Autodetects '.gz'
-    """
-    if filename.endswidth('.gz'):
-        compression = 'gzip'
-    else:
-        compression = None
-
-    df.to_csv(filename, index=False, compression=compression)
 
 class LinewiseCSVWriter:
     def __init__(self, filename, header=None, sync=True, append=False):
