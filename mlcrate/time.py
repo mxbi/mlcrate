@@ -23,9 +23,48 @@ class Timer:
         self.times[key] = time.time()
 
     def elapsed(self, key):
-        """Get the time passed in seconds since the specified key was added to the index"""
+        """Get the time elapsed in seconds since the specified key was added to the index"""
         return time.time() - self.times[key]
+
+    def format_elapsed(self, key, max_fields=3):
+        """Get the time elapsed in seconds, nicely formatted by format_duration()"""
+        return format_duration(self.elapsed(key), max_fields)
 
 def str_time_now():
     """Returns the current time as a string in the format 'YYYY_MM_DD_HH_MM_SS'. Useful for timestamping filenames etc."""
     return time.strftime("%Y_%m_%d_%H_%M_%S")
+
+def format_duration(seconds, max_fields=3):
+    """Formats a number of seconds in a pretty readable format, in terms of seconds, minutes, hours and days.
+    Example:
+    >>> format_duration(3825.21)
+    '1h03m45s'
+    >>> format_duration(3825.21, max_fields=2)
+    '1h03m'
+
+    Keyword arguments:
+    seconds -- A duration to be nicely formatted, in seconds
+    max_fields (default: 3) -- The number of units to display (eg. if max_fields is 1 and the time is three days it will only display the days unit)
+
+    Returns: A string representing the duration
+    """
+    seconds = float(seconds)
+    s = int(seconds % 60)
+    m = int((seconds / 60) % 60)
+    h = int((seconds / 3600) % 24)
+    d = int(seconds / 86400)
+
+    fields = []
+    for unit, value in zip(['d', 'h', 'm', 's'], [d, h, m, s]):
+        if len(fields) > 0: # If it's not the first value, pad with 0s
+            fields.append('{}{}'.format(str(value).rjust(2, '0'), unit))
+        elif value > 0: # If there are no existing values, we don't add this unit unless it's >0
+            fields.append('{}{}'.format(value, unit))
+
+    fields = fields[:max_fields]
+
+    # If the time was less than a second, we just return '<1s' TODO: Maybe return ms instead?
+    if len(fields) == 0:
+        fields.append('<1s')
+
+    return ''.join(fields)
