@@ -1,7 +1,7 @@
 import time
 import datetime
 
-class TimeTracker:
+class Timer:
     """A class for tracking timestamps and time elapsed since events. Useful for profiling code.
 
     Usage:
