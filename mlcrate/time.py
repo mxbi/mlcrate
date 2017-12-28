@@ -5,7 +5,7 @@ class Timer:
     """A class for tracking timestamps and time elapsed since events. Useful for profiling code.
 
     Usage:
-    >>> t = TimeTracker()
+    >>> t = Timer()
     >>> t.elapsed(0) # Seconds since the timetracker was initialised
     >>> t.add('func') # Save the current timestamp as 'func'
     >>> t.elapsed('func') # Seconds since 'func' was added

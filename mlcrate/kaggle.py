@@ -5,7 +5,7 @@ def save_sub(df, filename='sub.csv.gz'):
     df -- The pandas DataFrame of the submission
     filename -- The filename to save the submission to. Autodetects '.gz'
     """
-    if filename.endswidth('.gz'):
+    if filename.endswith('.gz'):
         compression = 'gzip'
     else:
         compression = None
