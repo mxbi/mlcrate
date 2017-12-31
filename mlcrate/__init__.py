@@ -2,7 +2,7 @@ import pickle
 import gzip
 import os
 
-from . import time, kaggle, xgb
+from . import time, kaggle, xgb#, sklearn
 
 __version__ = '0.0.0a1'
 
@@ -75,3 +75,43 @@ class LinewiseCSVWriter:
         """Manually flush the csv. Useless if flush=True in the class, as this is called after every write anyway."""
         self.f.flush()
         os.fsync(self.f.fileno())
+
+
+class SuperPool:
+    def __init__(self, n_cpu=-1):
+        from multiprocessing import cpu_count
+        from pathos.multiprocessing import ProcessPool
+        import tqdm
+
+        self.tqdm = tqdm
+
+        if n_cpu == -1:
+            n_cpu = cpu_count()
+
+        self.n_cpu = n_cpu
+        self.pool = ProcessPool(n_cpu)
+
+    def __del__(self):
+        self.pool.close()
+
+    def map(self, func, array, chunksize=16, description=''):
+        res = []
+
+        def func_tracked(args):
+            x, i = args
+            return func(x), i
+
+        array_tracked = zip(array, range(len(array)))
+
+        desc = '[mlcrate] {} CPUs{}'.format(self.n_cpu, ' - {}'.format(description) if description else '')
+        for out in self.tqdm.tqdm(self.pool.uimap(func_tracked, array_tracked, chunksize=chunksize), total=len(array), desc=desc, smoothing=0.05):
+            res.append(out)
+
+        # Sort based on i but return only the actual function result
+        actual_res = [r[0] for r in sorted(res, key=res[1])]
+
+        return actual_res
+
+    def exit(self):
+        self.pool.close()
+        self.pool.join()

@@ -83,7 +83,7 @@ def train_kfold(params, x_train, y_train, x_test=None, folds=5, stratify=None, r
         x_test = np.asarray(x_test)
         d_test = xgb.DMatrix(x_test)
 
-    if not skip_checks:
+    if not skip_checks and x_test is not None:
         assert x_train.shape[1] == x_test.shape[1], "x_train and x_test have different numbers of features."
 
     print('[mlcrate] Training {} {}XGBoost models on training set {} {}'.format(folds, 'stratified ' if stratify is not None else '',
@@ -118,7 +118,7 @@ def train_kfold(params, x_train, y_train, x_test=None, folds=5, stratify=None, r
         watchlist = [(d_train, 'train'), (d_valid, 'valid')]
 
         mdl = xgb.train(params, d_train, params.get('nrounds', 100000), watchlist,
-                        early_stopping_rounds=params.get('early_stopping_rounds', 50), verbose_eval=params.get('verbose_eval', 1))
+                        early_stopping_rounds=params.get('early_stopping_rounds', 50), verbose_eval=params.get('verbose_eval', 1), feval=params.get('feval'))
 
         scores.append(mdl.best_score)
 
