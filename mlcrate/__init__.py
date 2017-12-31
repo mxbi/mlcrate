@@ -108,7 +108,7 @@ class SuperPool:
             res.append(out)
 
         # Sort based on i but return only the actual function result
-        actual_res = [r[0] for r in sorted(res, key=res[1])]
+        actual_res = [r[0] for r in sorted(res, key=lambda r: r[1])]
 
         return actual_res
 

@@ -70,6 +70,27 @@ Data should be passed to the writer as an iterable, as conversion to string and 
 `sync` (default: True) -- Flush and sync the output to disk after every write operation. This means data appears in the file instantly instead of being buffered  
 `append` (default: False) -- Append to an existing CSV file. By default, the csv file is overwritten each time.
 
+### Easy multi-threaded function mapping with realtime progress bars
+
+mlcrate implements a multiprocessing pool that allows you to easily apply a function over an array using multiple cores, for a linear speedup. In syntax, it is almost identical to multiprocessing.Pool, but has the following benefits:
+
+- Real-time progress bar, showing the combined progress across all cores with tqdm. This is great for functions that take a long time, where usually using multiprocessing means you don't know how long the process will take
+- Support for functions defined AFTER the pool has been created. With multiprocessing, you can only map functions which were created before the pool was created, meaning if you defined a new function you would need to create a new pool.
+- Support for lambda and local functions
+- Almost no performance degrading compared to using multiprocessing.
+
+```python
+>>> pool = mlc.SuperPool()  # By default, the number of threads are used
+>>> def f(x):
+...     return x ** 2
+>>> res = pool.map(f, range(1000))  # Apply function f to every value in y
+[mlcrate] 8 CPUs: 100%|████████████████████████| 1000/1000 [00:00<00:00, 1183.78it/s]
+>>> res[:5]
+[0, 1, 4, 9, 16]
+
+>>> res = [f(x) for x in tqdm(range(1000)))]  # The map command is equivalent to this, except multithreaded
+```
+
 ### Time
 
 ###### [mlcrate.time.Timer()](https://github.com/mxbi/mlcrate/blob/4cf3f95f557886d8fdf97e4a5ab0908edaa51332/mlcrate/time.py#L4)
