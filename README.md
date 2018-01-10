@@ -5,10 +5,14 @@ The methods in this package aren't revolutionary, and most of them are very simp
 
 This package has been tested with Python 3.5+, but should work with all versions of Python 3. Python 2 is not officially supported (although most of the functions would work in theory.)
 
-## Installation
+### Installation
 
-Clone the repo and run `python setup.py install` within the top-level folder to install mlcrate.  
-Currently no dependencies are required package-wide, except when using mlcrate.xgboost which requires numpy, scikit-learn and xgboost.
+Clone the repo and run `python setup.py install` within the top-level folder to install mlcrate.
+
+### Dependencies
+
+Required dependencies: `numpy`, `pandas`, `pathos`  
+`mlcrate.xgboost` additionally requires: `scikit-learn`, `xgboost`
 
 ## Features
 
@@ -72,23 +76,28 @@ Data should be passed to the writer as an iterable, as conversion to string and 
 
 ### Easy multi-threaded function mapping with realtime progress bars
 
-mlcrate implements a multiprocessing pool that allows you to easily apply a function over an array using multiple cores, for a linear speedup. In syntax, it is almost identical to multiprocessing.Pool, but has the following benefits:
+mlcrate implements a multiprocessing pool that allows you to easily apply a function to an array using multiple cores, for a linear speedup. In syntax, it is almost identical to multiprocessing.Pool, but has the following benefits:
 
-- Real-time progress bar, showing the combined progress across all cores with tqdm. This is great for functions that take a long time, where usually using multiprocessing means you don't know how long the process will take
+- Real-time progress bar, showing the combined progress across all cores with tqdm,  where usually using multiprocessing means you don't know how long the process will take.
 - Support for functions defined AFTER the pool has been created. With multiprocessing, you can only map functions which were created before the pool was created, meaning if you defined a new function you would need to create a new pool.
 - Support for lambda and local functions
 - Almost no performance degrading compared to using multiprocessing.
 
+Example:
 ```python
 >>> pool = mlc.SuperPool()  # By default, the number of threads are used
+
 >>> def f(x):
 ...     return x ** 2
+
 >>> res = pool.map(f, range(1000))  # Apply function f to every value in y
-[mlcrate] 8 CPUs: 100%|████████████████████████| 1000/1000 [00:00<00:00, 1183.78it/s]
+[mlcrate] 8 CPUs: 100%|████████████████████████████████████| 1000/1000 [00:00<00:00, 1183.78it/s]
+
 >>> res[:5]
 [0, 1, 4, 9, 16]
 
->>> res = [f(x) for x in tqdm(range(1000)))]  # The map command is equivalent to this, except multithreaded
+>>> # The above map command is equivalent to this, except multithreaded
+>>> res = [f(x) for x in tqdm(range(1000)))]
 ```
 
 ### Time
