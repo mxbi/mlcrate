@@ -4,7 +4,7 @@ import os
 
 from . import time, kaggle, xgb#, sklearn
 
-__version__ = '0.0.0a1'
+__version__ = '0.0.1'
 
 def save(data, filename):
     """Pickles the passed data (with the highest available protocol) to disk using the passed filename.
@@ -80,7 +80,7 @@ class LinewiseCSVWriter:
 class SuperPool:
     def __init__(self, n_cpu=-1):
         """Process pool for applying functions multi-threaded with progress bars.
-        
+
         Arguments:
         n_cpu -- The number of processes to spawn. Defaults to the number of threads (logical cores) on your system.
 
@@ -108,13 +108,13 @@ class SuperPool:
 
     def map(self, func, array, chunksize=16, description=''):
         """Map a function over array using the pool and return [func(a) for a in array].
-        
+
         Arguments:
         func -- The function to apply. Can be a lambda function
         array -- Any iterable to which the function should be applied over
         chunksize (default: 16) -- The size of a "chunk" which is sent to a CPU core for processing in one go. Larger values should speed up processing when using very fast functions, while smaller values will give a more granular progressbar.
         description (optional) -- Text to be displayed next to the progressbar.
-        
+
         Returns:
         res -- A list of values returned from the function.
         """
