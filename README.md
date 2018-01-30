@@ -148,9 +148,10 @@ Formats a duration in a pretty readable format, in terms of seconds, minutes, ho
 
 ### Kaggle
 
-###### [mlcrate.kaggle.save_sub(df, filename='sub.csv.gz')](https://github.com/mxbi/mlcrate/blob/4cf3f95f557886d8fdf97e4a5ab0908edaa51332/mlcrate/kaggle.py#L1)
+###### [mlcrate.kaggle.save_sub(df, filename='sub_{}.csv.gz')](https://github.com/mxbi/mlcrate/blob/4cf3f95f557886d8fdf97e4a5ab0908edaa51332/mlcrate/kaggle.py#L1)
 
-Saves the passed dataframe with settings for a kaggle submission (index=False), and auto-enables GZIP compression if a '.gz' extension is passed.
+Saves the passed dataframe with index=False, and enables GZIP compression if a '.gz' extension is passed.
+If '{}' exists in the filename, this is replaced with the current time from mlcrate.time.now()
 
 ```python
 >>> df
@@ -158,7 +159,7 @@ Saves the passed dataframe with settings for a kaggle submission (index=False), 
 0   0         0.12
 1   1         0.38
 2   2         0.87
->>> mlc.kaggle.save_sub(df) # Saved as sub.csv.gz with compression
+>>> mlc.kaggle.save_sub(df) # Saved as eg. sub_2017_12_28_16_58_29.csv.gz with compression
 >>> mlc.kaggle.save_sub(df, 'sub_uncompressed.csv')
 ```
 
