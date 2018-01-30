@@ -111,20 +111,20 @@ A class for tracking timestamps and time elapsed since events. Useful for profil
 >>> t.elapsed(0)  # Number of seconds since initialisation
 3.0880863666534424
 >>> t.add('event')  # Log an event (eg. the start of some code you want to measure)
->>> t.elapsed('event')  # Elapsed seconds since the event
+>>> t.since('event')  # Elapsed seconds since the event
 4.758380889892578
->>> t.format_elapsed('event')  # Get the elapsed time in a pretty format
+>>> t.fsince('event')  # Get the elapsed time in a pretty format
 '1h03m12s'
 >>> t['event']  # Get the timestamp of event
 1514476396.0099056
 ```
 
-###### [mlcrate.time.str_time_now()](https://github.com/mxbi/mlcrate/blob/4cf3f95f557886d8fdf97e4a5ab0908edaa51332/mlcrate/time.py#L33)
+###### [mlcrate.time.now()](https://github.com/mxbi/mlcrate/blob/4cf3f95f557886d8fdf97e4a5ab0908edaa51332/mlcrate/time.py#L33)
 
 Returns the current time as a string in the format `'YYYY_MM_DD_HH_MM_SS'`. Useful for timestamping filenames etc.
 
 ```python
->>> mlc.time.str_time_now()
+>>> mlc.time.now()
 '2017_12_28_16_58_29'
 ```
 

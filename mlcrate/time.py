@@ -1,5 +1,5 @@
 import time
-import datetime
+from .backend import _deprecated
 
 class Timer:
     """A class for tracking timestamps and time elapsed since events. Useful for profiling code.
@@ -8,7 +8,7 @@ class Timer:
     >>> t = Timer()
     >>> t.elapsed(0) # Seconds since the timetracker was initialised
     >>> t.add('func') # Save the current timestamp as 'func'
-    >>> t.elapsed('func') # Seconds since 'func' was added
+    >>> t.since('func') # Seconds since 'func' was added
     >>> t['func'] # Get the absolute timestamp of 'func' for other uses
     """
     def __init__(self):
@@ -22,17 +22,23 @@ class Timer:
         """Add the current time to the index with the specified key"""
         self.times[key] = time.time()
 
-    def elapsed(self, key):
+    def since(self, key):
         """Get the time elapsed in seconds since the specified key was added to the index"""
         return time.time() - self.times[key]
 
-    def format_elapsed(self, key, max_fields=3):
+    def fsince(self, key, max_fields=3):
         """Get the time elapsed in seconds, nicely formatted by format_duration()"""
-        return format_duration(self.elapsed(key), max_fields)
+        return format_duration(self.since(key), max_fields)
+
+    elapsed = _deprecated(since, 'Timer.elapsed', 'Timer.since')
+    format_elapsed = _deprecated(fsince, 'Timer.format_elapsed', 'Timer.fsince')
 
 def now():
     """Returns the current time as a string in the format 'YYYY_MM_DD_HH_MM_SS'. Useful for timestamping filenames etc."""
     return time.strftime("%Y_%m_%d_%H_%M_%S")
+
+# Alias for backwards-compatibility
+str_time_now = _deprecated(now, 'mlcrate.time.str_time_now', 'mlcrate.time.now')
 
 def format_duration(seconds, max_fields=3):
     """Formats a number of seconds in a pretty readable format, in terms of seconds, minutes, hours and days.
