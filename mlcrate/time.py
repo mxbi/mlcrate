@@ -30,7 +30,7 @@ class Timer:
         """Get the time elapsed in seconds, nicely formatted by format_duration()"""
         return format_duration(self.elapsed(key), max_fields)
 
-def str_time_now():
+def now():
     """Returns the current time as a string in the format 'YYYY_MM_DD_HH_MM_SS'. Useful for timestamping filenames etc."""
     return time.strftime("%Y_%m_%d_%H_%M_%S")
 
