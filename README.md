@@ -7,7 +7,9 @@ This package has been tested with Python 3.5+, but should work with all versions
 
 ### Installation
 
-Clone the repo and run `python setup.py install` within the top-level folder to install mlcrate.
+`pip install mlcrate`
+
+Alternatively, lone the repo and run `python setup.py install` within the top-level folder to install the bleeding-edge version.
 
 ### Dependencies
 

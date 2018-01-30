@@ -4,7 +4,7 @@ import os
 
 from . import time, kaggle, xgb#, sklearn
 
-__version__ = '0.0.1'
+__version__ = '0.1.0'
 
 def save(data, filename):
     """Pickles the passed data (with the highest available protocol) to disk using the passed filename.
