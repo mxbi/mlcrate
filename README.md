@@ -17,7 +17,11 @@ Alternatively, clone the repo and run `python setup.py install` within the top-l
 Required dependencies: `numpy`, `pandas`, `pathos`  
 `mlcrate.xgboost` additionally requires: `scikit-learn`, `xgboost`
 
-## Features
+### Contributing
+
+If you find any bugs or have any feature suggestions (even general feature requests unrelated to what's already in the package), feel free to open an issue. Pull requests are also very welcome :slightly_smiling_face:
+
+# Docs
 
 ### Save/Load
 
