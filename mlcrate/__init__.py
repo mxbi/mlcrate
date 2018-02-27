@@ -2,7 +2,7 @@ import pickle
 import gzip
 import os
 
-from . import time, kaggle, xgb#, sklearn
+from . import time, kaggle, xgb, ensemble#, sklearn
 
 __version__ = '0.1.0'
 
