@@ -10,7 +10,7 @@ setup(
     author_email='mikel@mxbi.net',
     url='https://github.com/mxbi/mlcrate',
     license='MIT',
-    install_requires=['numpy', 'pandas', 'pathos'],
+    install_requires=['numpy', 'pandas', 'pathos', 'tqdm'],
     classifiers=['License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3 :: Only',
         'Topic :: Scientific/Engineering',

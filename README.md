@@ -1,4 +1,4 @@
-# mlcrate
+﻿# mlcrate
 [![PyPI version](https://badge.fury.io/py/mlcrate.svg)](https://pypi.python.org/pypi/mlcrate/)  
 A collection of handy python tools and functions, mainly for ML and Kaggle.
 
@@ -14,7 +14,7 @@ Alternatively, clone the repo and run `python setup.py install` within the top-l
 
 ### Dependencies
 
-Required dependencies: `numpy`, `pandas`, `pathos`  
+Required dependencies: `numpy`, `pandas`, `pathos`, `tqdm`  
 `mlcrate.xgboost` additionally requires: `scikit-learn`, `xgboost`
 
 ### Contributing
