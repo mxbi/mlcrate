@@ -6,7 +6,7 @@ class Timer:
 
     Usage:
     >>> t = Timer()
-    >>> t.elapsed(0) # Seconds since the timetracker was initialised
+    >>> t.since() # Seconds since the timetracker was initialised
     >>> t.add('func') # Save the current timestamp as 'func'
     >>> t.since('func') # Seconds since 'func' was added
     >>> t['func'] # Get the absolute timestamp of 'func' for other uses
@@ -22,11 +22,11 @@ class Timer:
         """Add the current time to the index with the specified key"""
         self.times[key] = time.time()
 
-    def since(self, key):
+    def since(self, key=0):
         """Get the time elapsed in seconds since the specified key was added to the index"""
         return time.time() - self.times[key]
 
-    def fsince(self, key, max_fields=3):
+    def fsince(self, key=0, max_fields=3):
         """Get the time elapsed in seconds, nicely formatted by format_duration()"""
         return format_duration(self.since(key), max_fields)
 
