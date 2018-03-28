@@ -14,8 +14,9 @@ Alternatively, clone the repo and run `python setup.py install` within the top-l
 
 ### Dependencies
 
-Required dependencies: `numpy`, `pandas`, `pathos`, `tqdm`  
-`mlcrate.xgboost` additionally requires: `scikit-learn`, `xgboost`
+Required dependencies: `numpy`, `pandas`, `pathos`, `tqdm`
+`mlcrate.xgb` additionally requires: `scikit-learn`, `xgboost`
+Saving `.feather` files additionally requires `feather-format`
 
 ### Contributing
 
@@ -26,7 +27,7 @@ If you find any bugs or have any feature suggestions (even general feature reque
 ### Save/Load
 
 mlcrate comes with a simple pickle wrapper for fast save/load of arbitrary python objects (with optional compression).
-Works with numpy, pandas, etc. and objects >4GB. Also cross-compatible with standard pickle dump/load.
+Works with numpy, pandas, etc. and objects >4GB. The extremely fast [Apache Feather](http://blog.cloudera.com/blog/2016/03/feather-a-fast-on-disk-format-for-data-frames-for-r-and-python-powered-by-apache-arrow/) format is also supported to save/load DataFrames.
 
 ```python
 >>> import mlcrate as mlc
@@ -36,20 +37,26 @@ Works with numpy, pandas, etc. and objects >4GB. Also cross-compatible with stan
 
 >>> mlc.load('x.pkl.gz')
 [1, 2, 3, 4]
+
+>>> import pandas as pd
+>>> mlc.save(pd.DataFrame(), 'x.feather') # DataFrames can be saved with ultra-fast feather format.
+>>> x = mlc.load('x.feather')
 ```
 
 ###### [mlcrate.save(data, filename)](https://github.com/mxbi/mlcrate/blob/df66daf0a9e7078058aa65a7f42f9509f0d2d300/mlcrate/__init__.py#L9)
 
 Pickles the passed data (with the highest available protocol) to disk using the passed filename.
 If the filename ends in '.gz' then the data will additionally be GZIPed before saving.
+If filename ends with '.feather' or '.fthr', mlcrate will try to save the file using feather (for pd DataFrames). Note that feather does not support .gz compression.
 
-*Keyword arguments:*  
-`data` -- The python object to pickle to disk (use a dict or list to save multiple objects)  
+*Keyword arguments:*
+`data` -- The python object to pickle to disk (use a dict or list to save multiple objects)
 `filename` -- String with the relative filename to save the data to. By convention should end in '.pkl' or 'pkl.gz'
 
 ###### [mlcrate.load(filename)](https://github.com/mxbi/mlcrate/blob/df66daf0a9e7078058aa65a7f42f9509f0d2d300/mlcrate/__init__.py#L24)
 
 Loads data saved with save() (or just normally saved with pickle). Uses gzip if filename ends in '.gz'
+Also reads feather files ending in .feather or .fthr.
 
 *Keyword arguments:*  
 `filename` -- String with the relative filename of the pickle to load.  

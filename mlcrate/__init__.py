@@ -9,30 +9,55 @@ __version__ = '0.1.0'
 def save(data, filename):
     """Pickles the passed data (with the highest available protocol) to disk using the passed filename.
     If the filename ends in '.gz' then the data will additionally be GZIPed before saving.
+    If filename ends with '.feather' or '.fthr', mlcrate will try to save the file using feather (for dataframes).
+    Note that feather does not support compression.
 
     Keyword arguments:
     data -- The python object to pickle to disk (use a dict or list to save multiple objects)
-    filename -- String with the relative filename to save the data to. By convention should end in '.pkl' or 'pkl.gz'
+    filename -- String with the relative filename to save the data to. By convention should end in '.pkl' or 'pkl.gz' or '.feather'
     """
-    if filename.endswith('.gz'):
-        fp = gzip.open(filename, 'wb')
+    fl = filename.lower()
+    if fl.endswith('.gz'):
+        if fl.endswith('.feather.gz') or fl.endswith('.fthr.gz'):
+            # Since feather doesn't support writing to the file handle, we can't easily point it to gzip.
+            raise NotImplementedError('Saving to compressed .feather not currently supported.')
+        else:
+            fp = gzip.open(filename, 'wb')
+            pickle.dump(data, fp, protocol=pickle.HIGHEST_PROTOCOL)
     else:
-        fp = open(filename, 'wb')
+        if fl.endswith('.feather') or fl.endswith('.fthr'):
+            if str(type(data)) != "<class 'pandas.core.frame.DataFrame'>":
+                raise TypeError('.feather format can only be used to save pandas DataFrames')
+            import feather
+            feather.write_dataframe(data, filename)
+        else:
+            fp = open(filename, 'wb')
+            pickle.dump(data, fp, protocol=pickle.HIGHEST_PROTOCOL)
 
-    pickle.dump(data, fp, protocol=pickle.HIGHEST_PROTOCOL)
 
 def load(filename):
-    """Loads data saved with save() (or just normally saved with pickle). Uses gzip if filename ends in '.gz'
+    """Loads data saved with save() (or just normally saved with pickle). Autodetects gzip if filename ends in '.gz'
+    Also reads feather files denoted .feather or .fthr.
 
     Keyword arguments:
-    filename -- String with the relative filename of the pickle at load.
+    filename -- String with the relative filename of the pickle/feather to load.
     """
-    if filename.endswith('.gz'):
-        fp = gzip.open(filename, 'rb')
+    fl = filename.lower()
+    if fl.endswith('.gz'):
+        if fl.endswith('.feather.gz') or fl.endswith('.fthr.gz'):
+            raise NotImplementedError('Compressed feather is not supported.')
+        else:
+            fp = gzip.open(filename, 'rb')
+            return pickle.load(fp)
     else:
-        fp = open(filename, 'rb')
+        if fl.endswith('.feather') or fl.endswith('.fthr'):
+            import feather
+            return feather.read_dataframe(filename)
+        else:
+            fp = open(filename, 'rb')
+            return pickle.load(fp)
 
-    return pickle.load(fp)
+
 
 class LinewiseCSVWriter:
     def __init__(self, filename, header=None, sync=True, append=False):
