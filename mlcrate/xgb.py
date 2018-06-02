@@ -18,6 +18,7 @@ def get_importances(model, features):
     outfile = open('mlcrate_xgb.fmap', 'w')
     for i, feat in enumerate(features):
         outfile.write('{0}\t{1}\tq\n'.format(i, feat))
+        i += 1
     outfile.close()
 
     importance = model.get_fscore(fmap='mlcrate_xgb.fmap')
