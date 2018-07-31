@@ -53,7 +53,7 @@ def totensor(arr, device=None, type='float32'):
 
 # We define the class only at call-time to allow for lazy torch import
 # TODO: Find a less hacky way of doing this. If you have any ideas let me know :)
-def MLP(dim, dropout=0.3, hidden_activation=torch.nn.ReLU, output_activation=None):
+def MLP(dim, dropout=0.3, hidden_activation='relu', output_activation=None):
     """A fully connected MLP network with the specified sizes at each layer.
 
     Arguments:
@@ -64,6 +64,9 @@ def MLP(dim, dropout=0.3, hidden_activation=torch.nn.ReLU, output_activation=Non
     output_activation (optional) -- Activation function at the end of the network.
     """
     _check_torch_import()
+    
+    if hidden_activation == 'relu':
+        hidden_activation = torch.nn.ReLU
 
     class mlc_MLP(torch.nn.Module):
         def __init__(self, dim, dropout, hidden_activation, output_activation):
