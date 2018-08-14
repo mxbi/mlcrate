@@ -1,4 +1,4 @@
-﻿# mlcrate
+# mlcrate
 [![PyPI version](https://badge.fury.io/py/mlcrate.svg)](https://pypi.python.org/pypi/mlcrate/)  
 A collection of handy python tools and helper functions, mainly for machine learning-related packages and Kaggle.
 
@@ -26,6 +26,16 @@ Saving `.feather` files additionally requires `feather-format`
 If you find any bugs or have any feature suggestions (even general feature requests unrelated to what's already in the package), feel free to open an issue. Pull requests are also very welcome :slightly_smiling_face:
 
 # Docs
+
+- Main module
+    + [Save/Load](#saveload)
+    + [Writing to a csv log one line at a time](#writing-to-a-csv-log-one-line-at-a-time)
+    + [Easy multi-threaded function mapping with realtime progress bars](#easy-multi-threaded-function-mapping-with-realtime-progress-bars)
+- [Time](#time)
+- [Kaggle](#kaggle)
+- [XGBoost](#xgboost)
+- [PyTorch](#pytorch)
+    + [Painless conversion between Python/NumPy types and PyTorch tensors](#painless-conversion-between-pythonnumpy-types-and-pytorch-tensors)
 
 ### Save/Load
 
@@ -225,6 +235,7 @@ Optionally, the split can be stratified along a passed array. Feature importance
 
 ```python
 >>> from mlcrate.torch import totensor, tonp
+
 >>> tensor = totensor([1, 2, 3]) # Convert almost any iterable or scalar to a PyTorch tensor easily
 >>> tensor
 tensor([ 1.,  2.,  3.])
@@ -238,10 +249,10 @@ tensor(1.)
 1.
 ```
 
-###### mlcrate.torch.tonp(tensor)
+###### [mlcrate.torch.tonp(tensor)](https://github.com/mxbi/mlcrate/blob/torch/mlcrate/torch.py#L13)
 Takes any PyTorch tensor and converts it to a numpy array or scalar as appropiate. Not heavily optimized.
 
-###### mlcrate.torch.totensor(arr, device=None, type='float32')
+###### [mlcrate.torch.totensor(arr, device=None, type='float32')](https://github.com/mxbi/mlcrate/blob/torch/mlcrate/torch.py#L22)
 
 Converts any array-like or scalar to a PyTorch tensor, and checks that the array is in the correct type (defaults to float32) and on the correct device.  
 Equivalent to calling `torch.from_array(np.array(arr, dtype=type)).to(device)` but more efficient.  
