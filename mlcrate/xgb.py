@@ -50,7 +50,7 @@ def train_kfold(params, x_train, y_train, x_test=None, folds=5, stratify=None, r
     Returns:
     models -- a list of trained xgboost.Booster objects
     p_train -- Out-of-fold training set predictions (shaped like y_train)
-    p_test -- Mean of test set predictions from the models
+    p_test -- Mean of test set predictions from the models. Returns None if 'x_test' was not provided.
     imps -- dict with \{feature: importance\} pairs representing the sum feature importance from all the models.
     """
 
@@ -66,7 +66,7 @@ def train_kfold(params, x_train, y_train, x_test=None, folds=5, stratify=None, r
         columns = x_train.columns.values
         columns_exists = True
     else:
-        columns = np.arange(x_train.shape[1])
+        columns = ['f{}'.format(i) for i in np.arange(x_train.shape[1])]
         columns_exists = False
 
     x_train = np.asarray(x_train)
@@ -136,10 +136,9 @@ def train_kfold(params, x_train, y_train, x_test=None, folds=5, stratify=None, r
         p_valid = mdl.predict(d_valid, ntree_limit=mdl.best_ntree_limit)
         if x_test is not None:
             p_test = mdl.predict(d_test, ntree_limit=mdl.best_ntree_limit)
+            ps_test.append(p_test)
 
         p_train[valid_kf] = p_valid
-
-        ps_test.append(p_test)
         models.append(mdl)
 
         fold_i += 1

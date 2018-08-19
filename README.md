@@ -213,5 +213,5 @@ Optionally, the split can be stratified along a passed array. Feature importance
 *Returns:*  
 `models` -- a list of trained xgboost.Booster objects  
 `p_train` -- Out-of-fold training set predictions (shaped like y_train)  
-`p_test` -- Mean of test set predictions from the models  
+`p_test` -- Mean of test set predictions from the models. Returns None if 'x_test' was not provided.  
 `imps` -- dict with \{feature: importance\} pairs representing the sum feature importance from all the models.
