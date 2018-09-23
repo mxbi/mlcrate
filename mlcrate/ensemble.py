@@ -3,7 +3,7 @@ from collections import defaultdict
 
 def rank_average(*args, **opts):
     """Return an array containing all the unique elements of the input arrays.
-    The elements are sorted base on the average of their index (a rank average).
+    The elements are sorted based on the average of their index (a rank average).
     This can be used for ensembling where you have an ordered list of elements (eg for MAP@5)
 
     The arrays can have different sizes - if an element does not appear in an array it is
@@ -16,7 +16,7 @@ def rank_average(*args, **opts):
     arrs = args
     weights = opts.get('weights', None)
     base_rank = opts.get('base_rank', None)
-    
+
     # assert len(set([len(arr) for arr in arrs])) == 1,  "All input arrays must be the same length"
     assert all([arr.ndim == 1 for arr in arrs]), "All input arrays must be one-dimensional"
 

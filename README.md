@@ -34,6 +34,7 @@ If you find any bugs or have any feature suggestions (even general feature reque
 - [Time](#time)
 - [Kaggle](#kaggle)
 - [XGBoost](#xgboost)
+- [Ensemble](#ensemble)
 - [PyTorch](#pytorch)
     + [Painless conversion between Python/NumPy types and PyTorch tensors](#painless-conversion-between-pythonnumpy-types-and-pytorch-tensors)
 
@@ -228,6 +229,31 @@ Optionally, the split can be stratified along a passed array. Feature importance
 `p_train` -- Out-of-fold training set predictions (shaped like y_train)  
 `p_test` -- Mean of test set predictions from the models. Returns None if 'x_test' was not provided.  
 `imps` -- dict with \{feature: importance\} pairs representing the sum feature importance from all the models.
+
+### Ensemble
+
+###### [mlcrate.ensemble.rank_average(*arrs, weights=None, base_rank=None)](https://github.com/mxbi/mlcrate/blob/torch/mlcrate/torch.py#L13)
+
+Returns an array containing all the unique elements of the input arrays.
+The elements are sorted based on the average of their index (a rank average).
+This can be used for ensembling where you have an ordered list of elements (eg for MAP@5)
+
+The arrays can have different sizes - if an element does not appear in an array it is
+assumed to have index `len(array)+1` or `base_rank`.
+
+*Keyword Arguments:*  
+`base_rank (optional):` Assumed rank/index of elements that don't appear in the array  
+`weights (optional):` Array of weights for a weighted rank average of the inputs  
+
+```python
+>>> from mlcrate.ensemble import rank_average
+
+>>> p1 = np.array([5, 3, 2, 8, 1]) # Sorted predictions from model 1 (eg. for MAP metric)
+>>> p2 = np.array([4, 5, 2, 3, 8]) # Sorted predictions from model 2
+
+>>> rank_average(p1, p2) # Returns elements from the two arrays sorted by average of their rank
+array([5, 3, 2, 4, 8, 1])
+```
 
 ### PyTorch
 
