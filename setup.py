@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='mlcrate',
-    version='0.1.0',
+    version='0.2.0',
     description='A collection of handy python tools and functions, mainly for ML and Kaggle.',
     long_description="For more info, see https://github.com/mxbi/mlcrate",
     packages=['mlcrate'],

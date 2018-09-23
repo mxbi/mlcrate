@@ -4,7 +4,7 @@ import os
 
 from . import time, kaggle, xgb, ensemble#, sklearn
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 def save(data, filename):
     """Pickles the passed data (with the highest available protocol) to disk using the passed filename.
@@ -19,7 +19,7 @@ def save(data, filename):
     folders = os.path.dirname(filename)
     if folders:
         os.makedirs(folders, exist_ok=True)
-    
+
     fl = filename.lower()
     if fl.endswith('.gz'):
         if fl.endswith('.feather.gz') or fl.endswith('.fthr.gz'):
