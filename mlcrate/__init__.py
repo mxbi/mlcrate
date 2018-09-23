@@ -16,6 +16,10 @@ def save(data, filename):
     data -- The python object to pickle to disk (use a dict or list to save multiple objects)
     filename -- String with the relative filename to save the data to. By convention should end in '.pkl' or 'pkl.gz' or '.feather'
     """
+    folders = os.path.dirname(filename)
+    if folders:
+        os.makedirs(folders, exist_ok=True)
+    
     fl = filename.lower()
     if fl.endswith('.gz'):
         if fl.endswith('.feather.gz') or fl.endswith('.fthr.gz'):
