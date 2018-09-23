@@ -1,21 +1,24 @@
-﻿# mlcrate
+# mlcrate
 [![PyPI version](https://badge.fury.io/py/mlcrate.svg)](https://pypi.python.org/pypi/mlcrate/)  
-A collection of handy python tools and functions, mainly for ML and Kaggle.
+A collection of handy python tools and helper functions, mainly for machine learning-related packages and Kaggle.
 
-The methods in this package aren't revolutionary, and most of them are very simple. They are largely bunch of 'macro' functions which I often end up rewriting across multiple projects, all in one place and easily accessible as a quality of life improvement. Hopefully, they can be some use to others in the community too.
+The methods in this package aren't revolutionary, and most of them are very simple. They are largely bunch of 'macro' functions which I often end up rewriting across multiple projects, and various helper functions for different packages, all in one place and easily accessible as a quality of life improvement. Hopefully, they can be some use to others in the community too.
 
-This package has been tested with Python 3.5+, but should work with all versions of Python 3. Python 2 is not officially supported (although most of the functions would work in theory.)
+This package has been tested with Python 3.5+, but should work with all versions of Python 3. Python 2 is not officially supported.
 
 ### Installation
 
 `pip install mlcrate`
 
-Alternatively, clone the repo and run `python setup.py install` within the top-level folder to install the bleeding-edge version.
+Alternatively, clone the repo and run `python setup.py install` within the top-level folder to install the bleeding-edge version - this is recommended.
 
 ### Dependencies
 
 Required dependencies: `numpy`, `pandas`, `pathos`, `tqdm`  
+
 `mlcrate.xgb` additionally requires: `scikit-learn`, `xgboost`  
+`mlcrate.torch` additionally requires: `pytorch`
+
 Saving `.feather` files additionally requires `feather-format`
 
 ### Contributing
@@ -23,6 +26,16 @@ Saving `.feather` files additionally requires `feather-format`
 If you find any bugs or have any feature suggestions (even general feature requests unrelated to what's already in the package), feel free to open an issue. Pull requests are also very welcome :slightly_smiling_face:
 
 # Docs
+
+- Main module
+    + [Save/Load](#saveload)
+    + [Writing to a csv log one line at a time](#writing-to-a-csv-log-one-line-at-a-time)
+    + [Easy multi-threaded function mapping with realtime progress bars](#easy-multi-threaded-function-mapping-with-realtime-progress-bars)
+- [Time](#time)
+- [Kaggle](#kaggle)
+- [XGBoost](#xgboost)
+- [PyTorch](#pytorch)
+    + [Painless conversion between Python/NumPy types and PyTorch tensors](#painless-conversion-between-pythonnumpy-types-and-pytorch-tensors)
 
 ### Save/Load
 
@@ -215,3 +228,40 @@ Optionally, the split can be stratified along a passed array. Feature importance
 `p_train` -- Out-of-fold training set predictions (shaped like y_train)  
 `p_test` -- Mean of test set predictions from the models. Returns None if 'x_test' was not provided.  
 `imps` -- dict with \{feature: importance\} pairs representing the sum feature importance from all the models.
+
+### PyTorch
+
+#### Painless conversion between Python/NumPy types and PyTorch tensors
+
+```python
+>>> from mlcrate.torch import totensor, tonp
+
+>>> tensor = totensor([1, 2, 3]) # Convert almost any iterable or scalar to a PyTorch tensor easily
+>>> tensor
+tensor([ 1.,  2.,  3.])
+>>> tonp(tensor) # Convert any PyTorch tensor back into a numpy array! No more tensor.data.detach().cpu().numpy()
+array([1., 2., 3.], dtype=float32)
+
+>>> tensor = totensor(1, 'cpu') # Device can be specified too!
+>>> tensor
+tensor(1.)
+>>> tonp(tensor) # Also works with scalars
+1.
+```
+
+###### [mlcrate.torch.tonp(tensor)](https://github.com/mxbi/mlcrate/blob/torch/mlcrate/torch.py#L13)
+Takes any PyTorch tensor and converts it to a numpy array or scalar as appropiate. Not heavily optimized.
+
+###### [mlcrate.torch.totensor(arr, device=None, type='float32')](https://github.com/mxbi/mlcrate/blob/torch/mlcrate/torch.py#L22)
+
+Converts any array-like or scalar to a PyTorch tensor, and checks that the array is in the correct type (defaults to float32) and on the correct device.  
+Equivalent to calling `torch.from_array(np.array(arr, dtype=type)).to(device)` but more efficient.  
+NOTE: If the input is a torch tensor, the type will not be checked.
+
+Keyword arguments:  
+`arr` -- Any array-like object (eg numpy array, list, numpy varaible)  
+`device` (optional) -- Move the tensor to this device after creation  
+`type` -- the numpy data type of the tensor. Defaults to 'float32' (regardless of the input)  
+
+*Returns:*  
+`tensor` - A torch tensor
