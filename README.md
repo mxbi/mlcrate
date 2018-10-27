@@ -1,5 +1,7 @@
 # mlcrate
-[![PyPI version](https://badge.fury.io/py/mlcrate.svg)](https://pypi.python.org/pypi/mlcrate/)  
+[![PyPI version](https://badge.fury.io/py/mlcrate.svg)](https://pypi.python.org/pypi/mlcrate/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/mxbi/mlcrate.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/mxbi/mlcrate/context:python)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/mxbi/mlcrate.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/mxbi/mlcrate/alerts/)  
 A collection of handy python tools and helper functions, mainly for machine learning-related packages and Kaggle.
 
 The methods in this package aren't revolutionary, and most of them are very simple. They are largely bunch of 'macro' functions which I often end up rewriting across multiple projects, and various helper functions for different packages, all in one place and easily accessible as a quality of life improvement. Hopefully, they can be some use to others in the community too.
