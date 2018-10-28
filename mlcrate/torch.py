@@ -51,6 +51,40 @@ def totensor(arr, device=None, type='float32'):
         tensor = tensor.to(device)
     return tensor
 
+class ShapeInferer:
+    def __init__(self, input_shape, batch_size=1):
+        self.input_shape = input_shape
+        self.batch_size = batch_size
+        
+        self.batch = torch.rand((self.batch_size, *self.input_shape))
+        
+        # Alias
+        self.prod = self.product
+        
+    @property
+    def output_shape(self):
+        return self.batch.shape[1:]
+    
+    def product(self):
+        prod = 0
+        for dim in self.output_shape:
+            prod += dim
+        return prod
+        
+    def add_layer(self, layer):
+        if layer == 'flatten':
+            self.batch = self.batch.reshape(self.batch.size(0), -1)
+        else:
+            device = next(layer.parameters()).device
+            self.batch = layer(self.batch.to(device))
+    
+    def accumulate_layers(self, *layers):
+        if len(layers) == 1 and hasattr(layers[0], '__iter__'):
+            layers = layers[0]
+            
+        for layer in layers:
+            self.add_layer(layer)
+
 # We define the class only at call-time to allow for lazy torch import
 # TODO: Find a less hacky way of doing this. If you have any ideas let me know :)
 def MLP(dim, dropout=0.3, hidden_activation='relu', output_activation=None):
