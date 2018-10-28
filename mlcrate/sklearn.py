@@ -36,7 +36,6 @@ def train_kfold(model, x_train, y_train, x_test=None, folds=5, metrics=None, pre
         columns = x_train.columns.values
         columns_exists = True
     else:
-        columns = np.arange(x_train.shape[1])
         columns_exists = False
 
     x_train = np.asarray(x_train)
@@ -121,6 +120,6 @@ def train_kfold(model, x_train, y_train, x_test=None, folds=5, metrics=None, pre
     else:
         p_test = None
 
-    print('[mlcrate] Finished training {} models, took {} - CV scores: {}'.format(folds, t.format_elapsed(0)), scores)
+    print('[mlcrate] Finished training {} models, took {} - CV scores: {}'.format(folds, t.format_elapsed(0), scores))
 
     return models, p_train, p_test
