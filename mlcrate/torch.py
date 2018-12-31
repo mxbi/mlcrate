@@ -12,8 +12,13 @@ def _check_torch_import():
 
 def tonp(tensor):
     """Takes any PyTorch tensor and converts it to a numpy array or scalar as appropiate.
+    When given something that isn't a PyTorch tensor, it will attempt to convert to a NumPy array or scalar anyway.
     Not heavily optimized."""
-    arr = tensor.data.detach().cpu().numpy()
+    _check_torch_import()
+    if isinstance(tensor, torch.Tensor):
+        arr = tensor.data.detach().cpu().numpy()
+    else: # It's not a tensor! We'll handle it anyway
+        arr = np.array(tensor)
     if arr.shape == ():
         return np.asscalar(arr)
     else:
