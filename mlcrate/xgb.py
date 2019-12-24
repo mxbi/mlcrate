@@ -12,6 +12,8 @@ def get_importances(model, features):
     importance -- A list of (feature, importance) tuples representing sorted importance
     """
 
+    features = [str(f) for f in features]
+    
     for feature in features:
         assert '\n' not in feature and '\t' not in feature, "\\n and \\t cannot be in feature names"
 
